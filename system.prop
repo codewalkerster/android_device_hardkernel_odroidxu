@@ -1,0 +1,8 @@
+#
+# system.prop for odroid
+#
+
+ro.arch=exynos5410
+persist.demo.hdmirotationlock=true
+mouse.right.click=back
+persist.demo.hdmirotation=landscape
