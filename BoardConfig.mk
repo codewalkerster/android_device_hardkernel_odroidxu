@@ -42,7 +42,7 @@ BOARD_MEMCPY_ALIGNMENT := 64
 BOARD_MEMCPY_ALIGN_BOUND := 32768
 
 # ODROID common modules
-BOARD_ODROID_COMMON_MODULES := libaudio liblight
+BOARD_ODROID_COMMON_MODULES := libaudio liblight libodroid-gps
 
 BOARD_EGL_CFG := device/hardkernel/odroidxu/conf/egl.cfg
 
