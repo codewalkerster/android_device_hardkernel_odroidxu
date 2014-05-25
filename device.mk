@@ -168,6 +168,10 @@ PRODUCT_COPY_FILES += \
 	device/hardkernel/proprietary/lib/libffmpeg_dice.so:system/lib/libffmpeg_dice.so \
 	device/hardkernel/proprietary/lib/libsonic.so:system/lib/libsonic.so
 
+# init.d support
+PRODUCT_COPY_FILES += \
+	device/hardkernel/proprietary/bin/sysinit:system/bin/sysinit
+
 PRODUCT_PROPERTY_OVERRIDES := \
 	ro.opengles.version=131072 \
 	ro.sf.lcd_density=160
