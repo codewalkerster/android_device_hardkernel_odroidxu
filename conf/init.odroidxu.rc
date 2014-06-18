@@ -12,17 +12,17 @@ on init
     mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
     mkdir /storage/sdcard1 0700 root root
 
-    mkdir /mnt/media_rw/usbdisk1 0700 media_rw media_rw
-    mkdir /storage/usbdisk1 0700 root root
+    mkdir /mnt/media_rw/usb2host 0700 media_rw media_rw
+    mkdir /storage/usb2host 0700 root root
    
-    mkdir /mnt/media_rw/usbdisk2 0700 media_rw media_rw
-    mkdir /storage/usbdisk2 0700 root root
+    mkdir /mnt/media_rw/usb3device 0700 media_rw media_rw
+    mkdir /storage/usb3device 0700 root root
 
-    mkdir /mnt/media_rw/usbdisk3 0700 media_rw media_rw
-    mkdir /storage/usbdisk3 0700 root root
+    mkdir /mnt/media_rw/usb3host 0700 media_rw media_rw
+    mkdir /storage/usb3host 0700 root root
     
     export EXTERNAL_STORAGE /storage/sdcard0
-    export SECONDARY_STORAGE /storage/sdcard1:/storage/usbdisk1:/storage/usbdisk2:/storage/usbdisk3
+    export SECONDARY_STORAGE /storage/sdcard1:/storage/usb2host:/storage/usb3device:/storage/usb3host
 
     # for backwards compatibilit
     symlink /storage/sdcard0 /sdcard
@@ -30,12 +30,12 @@ on init
     symlink /storage/sdcard1 /extSdCard
     symlink /storage/sdcard1 /mnt/extSdCard
     symlink /storage/sdcard1 /external_sd
-    symlink /storage/usbdisk1 /usbdisk1
-    symlink /storage/usbdisk1 /mnt/usbdisk1
-    symlink /storage/usbdisk2 /usbdisk2
-    symlink /storage/usbdisk2 /mnt/usbdisk2
-    symlink /storage/usbdisk3 /usbdisk3
-    symlink /storage/usbdisk3 /mnt/usbdisk3
+    symlink /storage/usb2host /usb2host
+    symlink /storage/usb2host /mnt/usb2host
+    symlink /storage/usb3device /usb3device
+    symlink /storage/usb3device /mnt/usb3device
+    symlink /storage/usb3host /usb3host
+    symlink /storage/usb3host /mnt/usb3host
 
     on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
@@ -58,7 +58,7 @@ on boot
 
 on fs
     mount_all /fstab.odroidxu
-#    setprop ro.crypto.fuse_sdcard true
+    setprop ro.crypto.fuse_sdcard true
 
 # Permissions for backlight
     chmod 0660 /sys/class/backlight/pwm-backlight.0/brightness
@@ -80,7 +80,11 @@ on fs
 
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
     chmod 0666	/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
- 
+
+on post-fs-data
+    # we will remap this as /mnt/sdcard with the sdcard fuse tool
+    mkdir /data/media 0775 media_rw media_rw
+
 #INA231 Energy monitor sensor
 	chmod 0666 /dev/sensor_arm
 	chown system system /dev/sensor_arm
@@ -113,15 +117,15 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw
     class late_start
     disabled
     
-service fuse_usbdisk1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbdisk1 /storage/usbdisk1
+service fuse_usb2host /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usb2host /storage/usb2host
     class late_start
     disabled
 
-service fuse_usbdisk2 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbdisk2 /storage/usbdisk2
+service fuse_usb3device /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usb3device /storage/usb3device
     class late_start
     disabled
 
-service fuse_usbdisk3 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbdisk3 /storage/usb3
+service fuse_usb3host /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usb3host /storage/usb3host
     class late_start
     disabled
     
