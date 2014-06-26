@@ -22,6 +22,11 @@ endif
 
 include $(LOCAL_PATH)/BoardConfig.mk
 
+include device/rockchip/common/phone/rk30_phone.mk
+# Get the long list of APNs
+PRODUCT_COPY_FILES += device/rockchip/common/phone/etc/apns-full-conf.xml:system/etc/apns-conf.xml
+PRODUCT_COPY_FILES += device/rockchip/common/phone/etc/spn-conf.xml:system/etc/spn-conf.xml
+
 DEVICE_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay
 #PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/conf/vold.fstab:system/etc/vold.fstab \
@@ -46,6 +51,10 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     setup_fs
 
+#3G Modem	
+PRODUCT_PACKAGES += \
+    rild
+ 
 # audio
 PRODUCT_PACKAGES += \
 	audio.primary.odroidxu \
@@ -112,6 +121,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
 	frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
 	frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
 	frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
 	frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \

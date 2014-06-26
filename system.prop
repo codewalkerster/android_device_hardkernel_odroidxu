@@ -6,3 +6,7 @@ ro.arch=exynos5410
 persist.demo.hdmirotationlock=true
 mouse.right.click=back
 persist.demo.hdmirotation=landscape
+
+ro.ril.ecclist=112,911
+rild.libpath=/system/lib/libril-rk29-dataonly.so
+rild.libargs=-d /dev/ttyUSB0
