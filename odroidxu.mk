@@ -27,15 +27,19 @@ PRODUCT_PACKAGES += \
         LiveWallpapersPicker \
         MagicSmokeWallpapers \
         VisualizationWallpapers \
-        librs_jni \
-        Launcher2
+        librs_jni
 
 PRODUCT_PROPERTY_OVERRIDES := \
         net.dns1=8.8.8.8 \
         net.dns2=8.8.4.4
 
+#PRODUCT_COPY_FILES := device/sample/etc/#apns-full-conf.xml:system/etc/apns-conf.xml
+
+PRODUCT_COPY_FILES += device/rockchip/common/phone/etc/apns-full-conf.xml:system/etc/apns-conf.xml
+PRODUCT_COPY_FILES += device/rockchip/common/phone/etc/spn-conf.xml:system/etc/spn-conf.xml
+
 # Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/hardkernel/odroidxu/device.mk)
 
 PRODUCT_NAME := odroidxu

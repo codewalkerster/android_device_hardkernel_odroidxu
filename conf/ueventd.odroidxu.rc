@@ -25,6 +25,13 @@
 /dev/media0               0660   system     camera
 /dev/media1               0660   system     camera
 
+# usb_webcam
+/dev/video0               0660   media      media
+/dev/video1               0660   media      media
+/dev/video2               0660   media      media
+/dev/video3               0660   media      media
+/dev/video4               0660   media      media
+
 # camera
 /dev/video40              0660   media      media
 /dev/video41              0660   media      media
@@ -36,13 +43,6 @@
 /dev/video47              0660   media      media
 /dev/video48              0660   media      media
 /dev/media2               0660   media      media
-
-# usb_webcam
-/dev/video0               0660   media      media
-/dev/video1               0660   media      media
-/dev/video2               0660   media      media
-/dev/video3               0660   media      media
-/dev/video4               0660   media      media
 
 # mixer
 /dev/video16              0660   system     audio
@@ -90,12 +90,3 @@
 
 # for radio
 /dev/ttyUSB*              0660   radio		radio
-
-# TTY
-/dev/ttySAC0              0600   bluetooth  bluetooth
-/dev/ttySAC1              0660   root       system
-/dev/ttySAC2              0660   root       system
-/dev/ttySAC3              0660   root       system
-
-# bluetooth device
-/dev/bus/usb/001/005      0660    bluetooth bluetooth

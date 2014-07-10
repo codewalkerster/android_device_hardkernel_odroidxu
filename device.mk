@@ -22,22 +22,17 @@ endif
 
 include $(LOCAL_PATH)/BoardConfig.mk
 
-include device/rockchip/common/phone/rk30_phone.mk
-# Get the long list of APNs
-PRODUCT_COPY_FILES += device/rockchip/common/phone/etc/apns-full-conf.xml:system/etc/apns-conf.xml
-PRODUCT_COPY_FILES += device/rockchip/common/phone/etc/spn-conf.xml:system/etc/spn-conf.xml
-
 DEVICE_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay
-#PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/conf/vold.fstab:system/etc/vold.fstab \
-    $(LOCAL_PATH)/conf/vold.fstab.sdboot:system/etc/vold.fstab.sdboot
+
+PRODUCT_COPY_FILES += \
+	$(LOCAL_PATH)/conf/vold.fstab.sdboot:system/etc/vold.fstab.sdboot \
+	$(LOCAL_PATH)/conf/vold.fstab.emmcboot:system/etc/vold.fstab.emmcboot \
+	device/hardkernel/odroidxu/conf/init.odroidxu.rc:root/init.odroidxu.rc \
+	device/hardkernel/odroidxu/conf/init.odroidxu.usb.rc:root/init.odroidxu.usb.rc 
 
 # Init files
 PRODUCT_COPY_FILES += \
-	device/hardkernel/odroidxu/conf/init.odroidxu.rc:root/init.odroidxu.rc \
-	device/hardkernel/odroidxu/conf/init.odroidxu.usb.rc:root/init.odroidxu.usb.rc \
-	device/hardkernel/odroidxu/conf/fstab.odroidxu:root/fstab.odroidxu \
-	device/hardkernel/odroidxu/conf/fstab.odroidxu.sdboot:root/fstab.odroidxu.sdboot
+	device/hardkernel/odroidxu/conf/fstab.odroidxu:root/fstab.odroidxu
 
 PRODUCT_COPY_FILES += \
 	device/hardkernel/odroidxu/conf/ueventd.odroidxu.rc:root/ueventd.odroidxu.rc
@@ -46,27 +41,22 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES := \
 	odroid-keypad.kcm
 
+PRODUCT_PACKAGES += \
+	Superuser \
+	su	
+
 # Filesystem management tools
 PRODUCT_PACKAGES += \
-    make_ext4fs \
-    setup_fs
+	make_ext4fs \
+	setup_fs
 
-#3G Modem	
-PRODUCT_PACKAGES += \
-    rild
- 
 # audio
 PRODUCT_PACKAGES += \
-	audio.primary.odroidxu \
+	audio_policy.$(TARGET_BOOTLOADER_BOARD_NAME) \
+	audio.primary.$(TARGET_BOOTLOADER_BOARD_NAME) \
 	audio.a2dp.default \
-	audio.usb.default
-
-# audio mixer paths
-PRODUCT_COPY_FILES += \
-	device/samsung/smdk_common/audio/mixer_paths.xml:system/etc/mixer_paths.xml
-
-PRODUCT_COPY_FILES += \
-	device/hardkernel/odroidxu/audio_policy.conf:system/etc/audio_policy.conf
+	audio.usb.default \
+	libaudioutils
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -93,11 +83,6 @@ PRODUCT_PACKAGES += \
     OdroidUpdater \
 	Utility
 
-PRODUCT_PACKAGES += \
-    Superuser \
-    su
-
-
 # OpenMAX IL configuration files
 PRODUCT_COPY_FILES += \
 	device/hardkernel/odroidxu/media_profiles.xml:system/etc/media_profiles.xml \
@@ -116,17 +101,26 @@ PRODUCT_COPY_FILES += \
 	device/hardkernel/proprietary/bin/Vendor_03fc_Product_05d8.idc:system/usr/idc/Vendor_03fc_Product_05d8.idc \
 	device/hardkernel/proprietary/bin/Vendor_1870_Product_0119.idc:system/usr/idc/Vendor_1870_Product_0119.idc \
 	device/hardkernel/proprietary/bin/Vendor_1870_Product_0119.idc:system/usr/idc/Vendor_1870_Product_0100.idc \
-	device/hardkernel/proprietary/bin/Vendor_1870_Product_0119.idc:system/usr/idc/Vendor_2808_Product_81c9.idc
+	device/hardkernel/proprietary/bin/Vendor_2808_Product_81c9.idc:system/usr/idc/Vendor_2808_Product_81c9.idc
 	
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
 	frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
 	frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
 	frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
 	frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
 	frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+        frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
 	frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
+
+
+# Bluetooth config file
+PRODUCT_COPY_FILES += \
+    system/bluetooth/data/main.nonsmartphone.conf:system/etc/bluetooth/main.conf \
+
 
 #
 # USB Ethernet Module
@@ -151,7 +145,6 @@ PRODUCT_COPY_FILES += \
 
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    debug.sf.no_hw_vsync=1 \
 	wifi.interface=wlan0 \
 	wifi.supplicant_scan_interval=15
 	
@@ -169,12 +162,17 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	device/hardkernel/proprietary/apk/DicePlayer.apk:system/app/DicePlayer.apk \
 	device/hardkernel/proprietary/lib/libSoundTouch.so:system/lib/libSoundTouch.so \
-	device/hardkernel/proprietary/lib/libdice_kk.so:system/lib/libdice_kk.so \
+	device/hardkernel/proprietary/lib/libdice_jb.so:system/lib/libdice_jb.so \
+	device/hardkernel/proprietary/lib/libdice_jb2.so:system/lib/libdice_jb2.so \
 	device/hardkernel/proprietary/lib/libdice_loadlibrary.so:system/lib/libdice_loadlibrary.so \
 	device/hardkernel/proprietary/lib/libdice_software.so:system/lib/libdice_software.so \
-	device/hardkernel/proprietary/lib/libdice_software_kk.so:system/lib/libdice_software_kk.so \
+	device/hardkernel/proprietary/lib/libdice_software_jb.so:system/lib/libdice_software_jb.so \
 	device/hardkernel/proprietary/lib/libffmpeg_dice.so:system/lib/libffmpeg_dice.so \
 	device/hardkernel/proprietary/lib/libsonic.so:system/lib/libsonic.so
+	
+## Not the prettiest hack ever, but it'll do until JPlayer is understood
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/../proprietary/etc/98netflix:system/etc/init.d/98netflix
 
 # init.d support
 PRODUCT_COPY_FILES += \
@@ -190,22 +188,38 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.kernel.android.checkjni=0
 
 # WQXGA_LCD
+ifeq ($(BOARD_USES_WQXGA_LCD),true)
 PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml
-
-# Device uses high-density artwork where available
-PRODUCT_AAPT_CONFIG := normal hdpi xhdpi xxhdpi
-PRODUCT_AAPT_PREF_CONFIG := xhdpi xxhdpi
+	frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
 
 PRODUCT_CHARACTERISTICS := tablet
 
-# call dalvik heap config
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
+PRODUCT_AAPT_CONFIG := xlarge hdpi xhdpi
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
-# call hwui memory config
-$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
+# setup dalvik vm configs.
+$(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
+else
+PRODUCT_COPY_FILES += \
+	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+
+PRODUCT_CHARACTERISTICS := phone
+
+PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
+
+PRODUCT_PROPERTY_OVERRIDES += \
+	dalvik.vm.heapgrowthlimit=128m
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+endif
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 $(call inherit-product-if-exists, hardware/samsung_slsi/exynos5/exynos5.mk)
 $(call inherit-product-if-exists, vendor/samsung_slsi/exynos5410/exynos5410-vendor.mk)
+
+PRODUCT_COPY_FILES += \
+        frameworks/native/data/etc/android.software.pppoe.xml:system/etc/permissions/android.software.pppoe.xml
+$(call inherit-product, external/rp-pppoe/pppoe-copy.mk)
+
+include device/rockchip/common/phone/rk30_phone.mk
