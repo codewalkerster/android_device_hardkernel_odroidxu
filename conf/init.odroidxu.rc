@@ -136,6 +136,7 @@ service insmod_smsc95xx /system/bin/insmod /system/lib/modules/smsc95xx.ko
     class core
     user root
     group root
+    disabled
     oneshot
 
 service insmod_usbmidi /system/bin/insmod /system/lib/modules/snd-usbmidi-lib.ko
@@ -151,8 +152,8 @@ service insmod_usb_audio /system/bin/insmod /system/lib/modules/snd-usb-audio.ko
     disabled
     oneshot
 
-#on property:init.svc.insmod_ax88179=stopped
-#    start insmod_smsc95xx
+on property:init.svc.insmod_ax88179=stopped
+    start insmod_smsc95xx
 
 on property:init.svc.insmod_usbmidi=stopped
     start insmod_usb_audio
