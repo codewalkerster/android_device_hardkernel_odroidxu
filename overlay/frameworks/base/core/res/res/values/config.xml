@@ -95,4 +95,7 @@
     <!--  Maximum number of supported users -->
     <integer name="config_multiuserMaximumUsers">8</integer>
 
+    <!-- Regex of wired ethernet ifaces -->
+    <string translatable="false" name="config_ethernet_iface_regex">eth0</string>
+
 </resources>
