@@ -139,8 +139,10 @@ PRODUCT_COPY_FILES += \
 # WIFI firmware & Module
 #
 PRODUCT_COPY_FILES += \
-	device/hardkernel/odroidxu/drivers/rtl8191su.ko:system/lib/modules/rtl8191su.ko \
-	device/hardkernel/odroidxu/drivers/rtl8192cu.ko:system/lib/modules/rtl8192cu.ko
+    device/hardkernel/odroidxu/drivers/rtl8191su.ko:system/lib/modules/rtl8191su.ko \
+    device/hardkernel/odroidxu/drivers/rtl8192cu.ko:system/lib/modules/rtl8192cu.ko \
+    device/hardkernel/odroidxu/drivers/rt5572sta.ko:system/lib/modules/rt5572sta.ko \
+    device/hardkernel/odroidxu/drivers/RT2870STA.dat:system/etc/Wireless/RT2870STA/RT2870STA.dat
 
 #
 # sound card Module
